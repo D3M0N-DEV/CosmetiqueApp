@@ -1,109 +1,203 @@
-import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
-import { ChevronDown } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { ArrowDown, ArrowUpRight } from 'lucide-react'
+import MagneticButton from '../ui/MagneticButton'
+import Marquee from '../ui/Marquee'
 
-const stagger = {
-  visible: { transition: { staggerChildren: 0.18 } },
-}
+const stagger = { visible: { transition: { staggerChildren: 0.12 } } }
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 0.61, 0.36, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 0.61, 0.36, 1] } },
 }
 
 export default function Hero() {
-  const scrollDown = () => {
+  const heroRef = useRef(null)
+  const { scrollY } = useScroll()
+  const y1 = useTransform(scrollY, [0, 600], [0, 100])
+  const opacity = useTransform(scrollY, [0, 400], [1, 0])
+
+  const [mouse, setMouse] = useState({ x: 50, y: 50 })
+
+  useEffect(() => {
+    // Skip mouse-tracking on touch devices to save battery
+    if (window.matchMedia('(pointer: coarse)').matches) return
+    const onMove = (e) => {
+      setMouse({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100,
+      })
+    }
+    window.addEventListener('mousemove', onMove)
+    return () => window.removeEventListener('mousemove', onMove)
+  }, [])
+
+  const scrollDown = () =>
     document.getElementById('docteur')?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* Background */}
+    <section
+      ref={heroRef}
+      className="relative min-h-[100svh] overflow-hidden flex flex-col"
+    >
+      {/* Background layers */}
       <div className="absolute inset-0 z-0">
-        {/* Deep layered gradient simulating a dark luxury clinic atmosphere */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0D0D0D] via-[#111111] to-[#0A0A0A]" />
-        {/* Radial gold glow top-right */}
-        <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-radial-gradient opacity-[0.04]"
-          style={{ background: 'radial-gradient(ellipse at top right, #C9A96E 0%, transparent 70%)' }} />
-        {/* Radial faint glow bottom-left */}
-        <div className="absolute bottom-0 left-0 w-[40vw] h-[40vh]"
-          style={{ background: 'radial-gradient(ellipse at bottom left, #C9A96E 0%, transparent 70%)', opacity: 0.025 }} />
-        {/* Subtle vertical lines decoration */}
-        <div className="absolute inset-0 opacity-[0.025]"
-          style={{ backgroundImage: 'repeating-linear-gradient(90deg, #C9A96E 0px, #C9A96E 1px, transparent 1px, transparent 120px)' }} />
+        <div className="absolute inset-0 bg-[#0A0A0A]" />
+        <div
+          className="absolute inset-0 transition-opacity duration-700"
+          style={{
+            background: `radial-gradient(800px circle at ${mouse.x}% ${mouse.y}%, rgba(201,169,110,0.08), transparent 50%)`,
+          }}
+        />
+        <div
+          className="absolute top-0 right-0 w-[70vw] h-[80vh] opacity-40 blur-3xl"
+          style={{
+            background:
+              'radial-gradient(ellipse at top right, rgba(201,169,110,0.15) 0%, transparent 60%)',
+          }}
+        />
+        <div
+          className="absolute -bottom-1/4 left-0 w-[60vw] h-[60vh] opacity-30 blur-3xl"
+          style={{
+            background:
+              'radial-gradient(ellipse at bottom left, rgba(201,169,110,0.12) 0%, transparent 60%)',
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(201,169,110,1) 1px, transparent 1px), linear-gradient(90deg, rgba(201,169,110,1) 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
+        />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-4 sm:px-6 max-w-5xl mx-auto">
-        <motion.div variants={stagger} initial="hidden" animate="visible">
+      {/* Main content */}
+      <motion.div
+        style={{ y: y1, opacity }}
+        className="relative z-10 flex-1 flex flex-col justify-center pt-28 sm:pt-32 pb-10"
+      >
+        <div className="max-w-[1400px] mx-auto w-full px-5 sm:px-8 lg:px-12">
           {/* Eyebrow */}
-          <motion.div variants={fadeUp} className="mb-6">
-            <span className="inline-block text-brand-gold text-xs tracking-[0.45em] uppercase border border-brand-gold/30 px-5 py-2 rounded-full">
-              Paris · Genève · Londres
-            </span>
-          </motion.div>
-
-          {/* Main headline */}
-          <motion.h1
-            variants={fadeUp}
-            className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-brand-white leading-[1.05] mb-6"
-          >
-            Excellence en<br />
-            <span className="text-gold-gradient">Chirurgie Intime</span>
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            variants={fadeUp}
-            className="text-brand-muted text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10"
-          >
-            Dr. Marc Abécassis, pionnier de la chirurgie intime depuis 1992.
-            Expertise, discrétion et bienveillance pour hommes et femmes.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/femme"
-              className="group relative overflow-hidden bg-transparent border border-brand-gold/60 hover:border-brand-gold text-brand-gold hover:text-brand-black px-8 py-4 rounded text-sm tracking-widest uppercase transition-colors duration-300 w-full sm:w-auto"
-            >
-              <span className="absolute inset-0 bg-brand-gold translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-              <span className="relative flex items-center justify-center gap-3">
-                <span className="text-lg">♀</span> Chirurgie Femme
-              </span>
-            </Link>
-            <Link
-              to="/homme"
-              className="group relative overflow-hidden bg-brand-gold text-brand-black hover:bg-brand-gold-light px-8 py-4 rounded text-sm tracking-widest uppercase font-semibold transition-colors duration-300 w-full sm:w-auto"
-            >
-              <span className="flex items-center justify-center gap-3">
-                <span className="text-lg">♂</span> Chirurgie Homme
-              </span>
-            </Link>
-          </motion.div>
-
-          {/* Trust bar */}
           <motion.div
-            variants={fadeUp}
-            className="mt-16 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-brand-subtle text-xs tracking-widest uppercase"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="flex items-center gap-3 mb-8 sm:mb-10"
           >
-            {['Depuis 1992', '3 000+ Patients', 'Accrédité HAS', 'BBC · France 5 · TMC'].map((t) => (
-              <span key={t} className="flex items-center gap-2">
-                <span className="w-1 h-1 rounded-full bg-brand-gold/50" />
-                {t}
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-gold animate-pulse" />
+              <span className="text-brand-gold text-[10px] tracking-[0.35em] sm:tracking-[0.4em] uppercase">
+                Pionnier depuis 1992
               </span>
-            ))}
+            </div>
+            <div className="hidden sm:block flex-1 h-px bg-gradient-to-r from-brand-gold/40 to-transparent max-w-[200px]" />
           </motion.div>
-        </motion.div>
+
+          <motion.div variants={stagger} initial="hidden" animate="visible">
+            {/* Massive headline — fluid scaling with safe mobile min */}
+            <h1 className="font-serif leading-[0.95] text-brand-white">
+              <motion.span variants={fadeUp} className="block text-[clamp(2.75rem,11vw,9rem)] font-medium tracking-tight">
+                L'Excellence
+              </motion.span>
+              <motion.span variants={fadeUp} className="block text-[clamp(2.75rem,11vw,9rem)] font-medium tracking-tight">
+                en chirurgie
+              </motion.span>
+              <motion.span
+                variants={fadeUp}
+                className="block text-[clamp(2.75rem,11vw,9rem)] italic font-normal text-gold-gradient tracking-tight"
+              >
+                intime.
+              </motion.span>
+            </h1>
+
+            {/* Subtitle row */}
+            <motion.div
+              variants={fadeUp}
+              className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-10 sm:mt-12 max-w-6xl"
+            >
+              <div className="lg:col-span-7">
+                <p className="text-brand-cream/80 text-base sm:text-lg md:text-xl leading-relaxed font-light">
+                  Dr. Marc Abécassis — l'un des chirurgiens les plus respectés au monde
+                  en chirurgie intime. <span className="text-brand-white">Plus de 3 000 patients</span> accompagnés
+                  avec une discrétion absolue, à Paris, Genève et Londres.
+                </p>
+              </div>
+
+              {/* Inline stats row — wraps gracefully on tight viewports */}
+              <div className="lg:col-span-5 lg:border-l lg:border-brand-charcoal lg:pl-8 flex items-start gap-5 sm:gap-6 flex-wrap">
+                <div>
+                  <div className="font-serif text-3xl sm:text-4xl md:text-5xl text-gold-gradient leading-none">25+</div>
+                  <div className="text-brand-muted text-[10px] sm:text-xs tracking-widest uppercase mt-2">Années</div>
+                </div>
+                <div className="w-px h-10 sm:h-12 bg-brand-charcoal mt-1" />
+                <div>
+                  <div className="font-serif text-3xl sm:text-4xl md:text-5xl text-gold-gradient leading-none">3K+</div>
+                  <div className="text-brand-muted text-[10px] sm:text-xs tracking-widest uppercase mt-2">Patients</div>
+                </div>
+                <div className="w-px h-10 sm:h-12 bg-brand-charcoal mt-1" />
+                <div>
+                  <div className="font-serif text-3xl sm:text-4xl md:text-5xl text-gold-gradient leading-none">3</div>
+                  <div className="text-brand-muted text-[10px] sm:text-xs tracking-widest uppercase mt-2">Villes</div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* CTAs — full width on mobile */}
+            <motion.div variants={fadeUp} className="mt-10 sm:mt-14 flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-start">
+              <MagneticButton
+                as="a"
+                href="/femme"
+                onClick={(e) => {
+                  e.preventDefault()
+                  window.location.assign('/femme')
+                }}
+                className="group relative inline-flex items-center justify-between sm:justify-start gap-3 bg-brand-white text-brand-black px-6 sm:px-8 py-4 sm:py-5 rounded-full text-xs sm:text-sm tracking-widest uppercase font-medium overflow-hidden w-full sm:w-auto"
+              >
+                <span className="relative z-10">Espace Femme</span>
+                <span className="relative z-10 w-8 h-8 rounded-full bg-brand-black flex items-center justify-center group-hover:bg-brand-gold transition-colors">
+                  <ArrowUpRight size={14} className="text-brand-white" />
+                </span>
+              </MagneticButton>
+
+              <MagneticButton
+                as="a"
+                href="/homme"
+                onClick={(e) => {
+                  e.preventDefault()
+                  window.location.assign('/homme')
+                }}
+                className="group relative inline-flex items-center justify-between sm:justify-start gap-3 border border-brand-gold/40 hover:border-brand-gold text-brand-gold px-6 sm:px-8 py-4 sm:py-5 rounded-full text-xs sm:text-sm tracking-widest uppercase transition-colors w-full sm:w-auto"
+              >
+                <span>Espace Homme</span>
+                <span className="w-8 h-8 rounded-full border border-brand-gold/40 flex items-center justify-center group-hover:bg-brand-gold group-hover:border-brand-gold transition-colors">
+                  <ArrowUpRight size={14} className="text-brand-gold group-hover:text-brand-black transition-colors" />
+                </span>
+              </MagneticButton>
+            </motion.div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Bottom marquee */}
+      <div className="relative z-10 border-y border-brand-charcoal py-4 sm:py-6 bg-brand-black/40 backdrop-blur-sm">
+        <Marquee
+          items={['Paris', 'Genève', 'Londres', 'Discrétion', 'Excellence', 'Expertise']}
+          duration={50}
+        />
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll cue — desktop only */}
       <button
         onClick={scrollDown}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-brand-muted hover:text-brand-gold transition-colors group"
+        className="absolute bottom-28 right-6 lg:right-12 z-10 hidden lg:flex flex-col items-center gap-3 text-brand-muted hover:text-brand-gold transition-colors group"
         aria-label="Défiler vers le bas"
       >
-        <span className="text-[10px] tracking-[0.3em] uppercase">Découvrir</span>
-        <ChevronDown size={18} className="animate-bounce_slow" />
+        <span className="text-[10px] tracking-[0.4em] uppercase rotate-90 origin-center mt-8">
+          Scroll
+        </span>
+        <div className="w-px h-12 bg-gradient-to-b from-brand-gold/40 to-transparent group-hover:from-brand-gold transition-colors mt-6" />
+        <ArrowDown size={14} className="animate-bounce_slow" />
       </button>
     </section>
   )

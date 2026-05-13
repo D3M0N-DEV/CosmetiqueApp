@@ -3,21 +3,30 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import ScrollToTop from './components/layout/ScrollToTop'
+import StickyCTA from './components/layout/StickyCTA'
+import Cursor from './components/ui/Cursor'
+import Loader from './components/ui/Loader'
 import HomePage from './pages/HomePage'
 import FemmePage from './pages/FemmePage'
 import HommePage from './pages/HommePage'
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 0.61, 0.36, 1] } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.3 } },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 0.61, 0.36, 1] } },
+  exit: { opacity: 0, y: -10, transition: { duration: 0.3 } },
 }
 
 function AnimatedRoutes() {
   const location = useLocation()
   return (
     <AnimatePresence mode="wait">
-      <motion.div key={location.pathname} variants={pageVariants} initial="initial" animate="animate" exit="exit">
+      <motion.div
+        key={location.pathname}
+        variants={pageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
         <Routes location={location}>
           <Route path="/" element={<HomePage />} />
           <Route path="/femme" element={<FemmePage />} />
@@ -31,9 +40,12 @@ function AnimatedRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
+      <Loader />
+      <Cursor />
       <ScrollToTop />
       <Navbar />
       <AnimatedRoutes />
+      <StickyCTA />
       <Footer />
     </BrowserRouter>
   )

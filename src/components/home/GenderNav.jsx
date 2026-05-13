@@ -1,97 +1,141 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import FadeInOnScroll from '../ui/FadeInOnScroll'
-import SectionHeading from '../ui/SectionHeading'
+import TiltCard from '../ui/TiltCard'
+import SplitText from '../ui/SplitText'
 
 const cards = [
   {
     gender: 'Femme',
     symbol: '♀',
     href: '/femme',
-    tagline: 'Féminité & Épanouissement',
+    number: '01',
+    tagline: 'Féminité · Épanouissement',
     description:
-      'Hyménoplastie, Nymphoplastie, Vaginoplastie, Sensibilité du Clitoris, Lifting du Pubis — des interventions conçues pour le bien-être intime féminin.',
+      'Hyménoplastie, Nymphoplastie, Vaginoplastie, Sensibilité du Clitoris, Lifting du Pubis.',
     procedures: ['Hyménoplastie', 'Nymphoplastie', 'Vaginoplastie', 'Sensibilité du Clitoris', 'Lifting du Pubis'],
-    gradient: 'from-[#1a1016] via-[#18101a] to-[#0f0a12]',
-    accentColor: '#D4A8C9',
-    glowColor: 'rgba(212,168,201,0.08)',
+    glow: 'rgba(212,168,201,0.10)',
+    bg: 'from-[#1a1016] via-[#150d18] to-[#0f0a12]',
   },
   {
     gender: 'Homme',
     symbol: '♂',
     href: '/homme',
-    tagline: 'Virilité & Confiance',
+    number: '02',
+    tagline: 'Virilité · Confiance',
     description:
-      'Allongement, Grossissement, Circoncision, Implants Testiculaires, Lifting Scrotal — des solutions pour l\'épanouissement masculin intime.',
+      'Allongement du Pénis, Grossissement, Circoncision, Implants Testiculaires, Lifting Scrotal.',
     procedures: ['Allongement du Pénis', 'Grossissement du Pénis', 'Circoncision', 'Implants Testiculaires', 'Lifting Scrotal'],
-    gradient: 'from-[#0f1016] via-[#101318] to-[#0a0d12]',
-    accentColor: '#A8C4D4',
-    glowColor: 'rgba(168,196,212,0.08)',
+    glow: 'rgba(168,196,212,0.10)',
+    bg: 'from-[#0f1016] via-[#0e1218] to-[#0a0d12]',
   },
 ]
 
 export default function GenderNav() {
   return (
-    <section className="py-24 md:py-32 bg-brand-black" id="sections">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Nos Spécialités"
-          title="Chirurgie sur mesure"
-          subtitle="Des interventions hautement spécialisées pour hommes et femmes, réalisées avec une expertise inégalée et dans le respect absolu de votre intimité."
-        />
+    <section className="py-20 sm:py-24 md:py-36 bg-brand-black relative overflow-hidden">
+      <div className="hidden md:block absolute top-12 right-6 lg:right-12 text-brand-gold/30 text-xs tracking-[0.4em] uppercase font-mono">
+        02 / Spécialités
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-          {cards.map(({ gender, symbol, href, tagline, description, procedures, gradient, accentColor, glowColor }, i) => (
-            <FadeInOnScroll key={gender} delay={i * 0.15}>
-              <Link to={href} className="block group">
-                <motion.div
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.3, ease: 'easeOut' }}
-                  className={`relative rounded-2xl overflow-hidden border border-brand-charcoal group-hover:border-brand-gold/40 transition-all duration-500 bg-gradient-to-br ${gradient} p-8 md:p-10 min-h-[420px] flex flex-col`}
-                  style={{ boxShadow: `0 0 0 rgba(201,169,110,0)` }}
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Header */}
+        <div className="grid grid-cols-12 gap-4 sm:gap-6 mb-10 sm:mb-16">
+          <div className="col-span-12 lg:col-span-2">
+            <p className="text-brand-gold text-[10px] tracking-[0.4em] uppercase">Domaines</p>
+          </div>
+          <div className="col-span-12 lg:col-span-10">
+            <h2 className="font-serif text-[clamp(2.25rem,8vw,6rem)] text-brand-white leading-[0.95]">
+              <SplitText text="Pour elles," by="word" />
+              <br />
+              <span className="italic text-gold-gradient">
+                <SplitText text="pour eux." by="word" delay={0.15} />
+              </span>
+            </h2>
+            <FadeInOnScroll delay={0.3}>
+              <p className="text-brand-muted text-sm sm:text-base md:text-lg max-w-2xl mt-6 sm:mt-8 leading-relaxed">
+                Des interventions hautement spécialisées, réalisées avec une expertise inégalée et
+                dans le respect absolu de votre intimité.
+              </p>
+            </FadeInOnScroll>
+          </div>
+        </div>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          {cards.map((c, i) => (
+            <FadeInOnScroll key={c.gender} delay={i * 0.15}>
+              <Link to={c.href} className="block group" data-cursor-hover>
+                <TiltCard
+                  intensity={5}
+                  className={`relative rounded-3xl overflow-hidden border border-brand-charcoal group-hover:border-brand-gold/40 bg-gradient-to-br ${c.bg} transition-all duration-500 will-change-transform`}
                 >
-                  {/* Glow on hover */}
                   <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
-                    style={{ background: `radial-gradient(ellipse at 30% 30%, ${glowColor} 0%, transparent 70%)` }}
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-3xl"
+                    style={{
+                      background: `radial-gradient(600px circle at 30% 0%, ${c.glow} 0%, transparent 60%)`,
+                    }}
                   />
-                  {/* Gold top border line that grows */}
-                  <div className="absolute top-0 left-0 h-0.5 w-0 group-hover:w-full bg-gold-gradient transition-all duration-700 ease-out rounded-t-2xl" />
+                  <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-gold/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                  {/* Symbol */}
-                  <div className="relative z-10 mb-6">
+                  <div className="relative p-7 sm:p-10 md:p-12 min-h-[400px] sm:min-h-[480px] flex flex-col">
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-8 sm:mb-12">
+                      <div className="font-mono text-brand-gold/40 text-xs tracking-widest">
+                        {c.number}
+                      </div>
+                      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-brand-gold/30 group-hover:border-brand-gold group-hover:bg-brand-gold flex items-center justify-center transition-all duration-300">
+                        <ArrowUpRight
+                          size={18}
+                          className="text-brand-gold group-hover:text-brand-black -rotate-45 group-hover:rotate-0 transition-transform duration-300"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Symbol watermark — scaled for mobile */}
                     <span
-                      className="font-serif text-7xl md:text-8xl leading-none opacity-20 group-hover:opacity-40 transition-opacity duration-300"
-                      style={{ color: accentColor }}
+                      className="absolute right-4 sm:right-8 bottom-4 sm:bottom-8 font-serif text-[7rem] sm:text-[10rem] md:text-[12rem] leading-none opacity-[0.05] group-hover:opacity-[0.10] transition-opacity duration-700 select-none pointer-events-none text-brand-gold"
                     >
-                      {symbol}
+                      {c.symbol}
                     </span>
-                  </div>
 
-                  {/* Content */}
-                  <div className="relative z-10 flex-1">
-                    <p className="text-brand-gold text-xs tracking-[0.3em] uppercase mb-2">{tagline}</p>
-                    <h3 className="font-serif text-4xl md:text-5xl text-brand-white mb-4">{gender}</h3>
-                    <p className="text-brand-muted text-sm leading-relaxed mb-8">{description}</p>
+                    {/* Content */}
+                    <div className="flex-1 relative z-10">
+                      <p className="text-brand-gold text-[10px] tracking-[0.4em] uppercase mb-3 sm:mb-4">
+                        {c.tagline}
+                      </p>
+                      <h3 className="font-serif text-5xl sm:text-6xl md:text-7xl text-brand-white mb-4 sm:mb-6 leading-none">
+                        <span className="italic">{c.gender}</span>
+                      </h3>
+                      <p className="text-brand-cream/70 text-sm leading-relaxed max-w-md">
+                        {c.description}
+                      </p>
+                    </div>
 
-                    {/* Procedure list */}
-                    <ul className="space-y-2 mb-8">
-                      {procedures.map((proc) => (
-                        <li key={proc} className="flex items-center gap-2 text-brand-subtle text-xs">
-                          <span className="text-brand-gold/50 text-[8px]">✦</span>
-                          {proc}
+                    <ul className="mt-8 sm:mt-10 space-y-2 relative z-10">
+                      {c.procedures.map((proc, idx) => (
+                        <li
+                          key={proc}
+                          className="flex items-center gap-3 text-brand-muted text-xs group-hover:text-brand-cream/80 transition-colors"
+                        >
+                          <span className="font-mono text-brand-gold/50 text-[10px] w-5">
+                            {String(idx + 1).padStart(2, '0')}
+                          </span>
+                          <span className="flex-1">{proc}</span>
                         </li>
                       ))}
                     </ul>
-                  </div>
 
-                  {/* CTA */}
-                  <div className="relative z-10 flex items-center gap-3 text-brand-gold text-sm tracking-widest uppercase group-hover:gap-5 transition-all duration-300">
-                    <span>Découvrir</span>
-                    <ArrowRight size={16} />
+                    <div className="mt-8 sm:mt-10 pt-6 border-t border-brand-charcoal flex items-center justify-between relative z-10">
+                      <span className="text-brand-gold text-[10px] sm:text-xs tracking-[0.3em] uppercase">
+                        Découvrir l'espace
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="w-8 h-px bg-brand-gold group-hover:w-16 transition-all duration-500" />
+                      </div>
+                    </div>
                   </div>
-                </motion.div>
+                </TiltCard>
               </Link>
             </FadeInOnScroll>
           ))}

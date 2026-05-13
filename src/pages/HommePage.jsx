@@ -29,9 +29,9 @@ export default function HommePage() {
       />
 
       {/* Pillars */}
-      <section className="py-16 bg-brand-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <section className="py-12 sm:py-16 bg-brand-dark">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {pillars.map(({ icon: Icon, title, desc }, i) => (
               <FadeInOnScroll key={title} delay={i * 0.1}>
                 <div className="flex items-start gap-4 p-6 rounded-xl border border-brand-charcoal bg-brand-card/60">
@@ -64,8 +64,8 @@ export default function HommePage() {
       </section>
 
       {/* Procedures */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 sm:py-20 md:py-28">
+        <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8">
           <FadeInOnScroll>
             <div className="text-center mb-14">
               <p className="text-brand-gold text-xs tracking-[0.35em] uppercase mb-4">Nos interventions</p>

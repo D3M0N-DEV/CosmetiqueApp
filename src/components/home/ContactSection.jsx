@@ -6,8 +6,8 @@ import SectionHeading from '../ui/SectionHeading'
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="py-24 md:py-36 bg-brand-black">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contact" className="py-20 sm:py-24 md:py-36 bg-brand-black">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Nous Contacter"
           title="Trois cabinets à votre service"

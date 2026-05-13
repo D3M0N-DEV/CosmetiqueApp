@@ -6,6 +6,7 @@
   html {
     scroll-behavior: smooth;
     background-color: #0A0A0A;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
@@ -15,6 +16,39 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    /* iOS safe-area padding handled per-section */
+  }
+
+  /* Belt-and-suspenders to prevent any horizontal scroll on mobile */
+  #root {
+    overflow-x: clip;
+  }
+
+  /* Larger tap targets on touch devices */
+  @media (pointer: coarse) {
+    button, a, input, select, textarea {
+      touch-action: manipulation;
+    }
+  }
+
+  /* Custom cursor — hide native ONLY on devices with a fine pointer (mouse).
+     Touch devices keep their native behavior. */
+  @media (pointer: fine) {
+    html, body {
+      cursor: none;
+    }
+    a, button, input, textarea, select, label, [role="button"], [data-cursor-hover] {
+      cursor: none;
+    }
+  }
+
+  /* Honor reduced-motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   ::selection {

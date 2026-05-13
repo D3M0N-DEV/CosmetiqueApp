@@ -32,17 +32,17 @@ export default function ProcedureCard({ procedure, index }) {
         {/* Header — always visible */}
         <button
           onClick={() => setOpen((v) => !v)}
-          className="w-full text-left p-6 md:p-8 group"
+          className="w-full text-left p-5 sm:p-6 md:p-8 group"
           aria-expanded={open}
         >
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-3 sm:gap-4">
             <div className="flex-1 min-w-0">
               {/* Number + title */}
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3 mb-2 flex-wrap">
                 <span className="text-brand-gold/40 font-serif text-sm font-bold tabular-nums">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <h3 className="font-serif text-2xl md:text-3xl text-brand-white group-hover:text-brand-gold transition-colors">
+                <h3 className="font-serif text-xl sm:text-2xl md:text-3xl text-brand-white group-hover:text-brand-gold transition-colors leading-tight">
                   {procedure.title}
                 </h3>
               </div>
@@ -101,7 +101,7 @@ export default function ProcedureCard({ procedure, index }) {
               transition={{ duration: 0.4, ease: [0.22, 0.61, 0.36, 1] }}
               className="overflow-hidden"
             >
-              <div className="px-6 md:px-8 pb-8 border-t border-brand-charcoal pt-6">
+              <div className="px-5 sm:px-6 md:px-8 pb-6 sm:pb-8 border-t border-brand-charcoal pt-5 sm:pt-6">
                 {/* Full description */}
                 <p className="text-brand-muted text-sm leading-relaxed mb-8">
                   {procedure.description}
@@ -117,8 +117,8 @@ export default function ProcedureCard({ procedure, index }) {
                       </h4>
                       <dl className="space-y-3">
                         {procedure.details.map(({ label, value }) => (
-                          <div key={label} className="flex items-start gap-3">
-                            <dt className="text-brand-subtle text-xs w-36 flex-shrink-0 pt-0.5">{label}</dt>
+                          <div key={label} className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3">
+                            <dt className="text-brand-subtle text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-normal sm:normal-case w-36 flex-shrink-0 sm:pt-0.5">{label}</dt>
                             <dd className="text-brand-cream text-sm leading-snug">{value}</dd>
                           </div>
                         ))}
